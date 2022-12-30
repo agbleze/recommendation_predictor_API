@@ -2,9 +2,6 @@
 
 This repo contains code for an API backed by Deep Learning with Natural Language Processing 
 
-# Usage
-
-The API accepts product reviews and predicts whether a client is 
 
 ## Project Description
 
@@ -44,5 +41,5 @@ A neural network architecture was developed and feed with processed data for tra
 
 ## Result and use
 
-1. A Deep learning API that accepts a product review and predict whether client is likely to recommend the product 
+1. A Deep learning API that accepts a product review and predict whether client is likely to recommend the product as a response.
                                    
