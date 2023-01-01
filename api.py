@@ -74,18 +74,31 @@ class RecommendPredictor(Resource):
         
         return result
     
-    
+# class Entrypoint(Resource):
+#     @staticmethod
+#     def api_description():
+#         return {'api_desc': 'This is a Deep Learning API for predicting \n'
+#                             'whether a product product will be recommended \n'
+#                             'based on reviews'
+#                             }
 
 app = Flask(__name__)
 api = Api(app)
 
-
+#api.add_resource(Entrypoint, '/')
 api.add_resource(RecommendPredictor, '/predict')
+    
+
+# app = Flask(__name__)
+# api = Api(app)
+
+
+# api.add_resource(RecommendPredictor, '/predict')
 
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=8000)
     
     
     
