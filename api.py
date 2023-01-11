@@ -3,6 +3,7 @@
 import joblib
 from flask import Flask, request
 from flask_restful import Resource, Api
+from flask_ngrok import run_with_ngrok
 from helpers import predict_category
 
 from classifier import ReviewClassifier
@@ -83,6 +84,7 @@ class RecommendPredictor(Resource):
 #                             }
 
 app = Flask(__name__)
+#run_with_ngrok(app)
 api = Api(app)
 
 #api.add_resource(Entrypoint, '/')
@@ -97,8 +99,8 @@ api.add_resource(RecommendPredictor, '/predict')
 
 
 
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=8000)
+if __name__ == '__main__':
+    app.run()
     
     
     
