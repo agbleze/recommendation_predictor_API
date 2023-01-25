@@ -27,7 +27,7 @@ from embedding_matrix import EmbeddingMatrixMaker
 file = open(args.vectorizer_file)
 vectorizer_file = json.load(file)
 
-review_vocab = vectorizer_file['title_vocab']['token_to_idx'].keys()
+review_vocab = vectorizer_file['review_vocab']['token_to_idx'].keys()
 
 
 review_outcome = vectorizer_file['category_vocab']['token_to_idx']  
@@ -68,7 +68,7 @@ class RecommendPredictor(Resource):
     def post():
         review = request.get_json()['review']
         
-        result = predict_category(title=review, classifier=classifier,
+        result = predict_category(review=review, classifier=classifier,
                          vectorizer=vectorizer, 
                          max_length=dataset._max_seq_length + 1
                          )  
