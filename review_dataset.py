@@ -22,27 +22,27 @@ from vectorizer import ReviewVectorizer
 
 #%%
 class ReviewDataset(Dataset):
-    def __init__(self, news_df: pd.DataFrame, vectorizer):
+    def __init__(self, review_df: pd.DataFrame, vectorizer):
         """
         Args:
-            news_df (pandas.DataFrame): the dataset
+            review_df (pandas.DataFrame): the dataset
             vectorizer (NewsVectorizer): vectorizer instatiated from dataset
         """
-        self.news_df = news_df
+        self.review_df = review_df
         self._vectorizer = vectorizer
 
         # +1 if only using begin_seq, +2 if using both begin and end seq tokens
         measure_len = lambda context: len(context.split(" "))
-        self._max_seq_length = max(map(measure_len, news_df['reviews.text'])) + 2
+        self._max_seq_length = max(map(measure_len, review_df['reviews.text'])) + 2
         
 
-        self.train_df = self.news_df[self.news_df.split=='train']
+        self.train_df = self.review_df[self.review_df.split=='train']
         self.train_size = len(self.train_df)
 
-        self.val_df = self.news_df[self.news_df.split=='val']
+        self.val_df = self.review_df[self.review_df.split=='val']
         self.validation_size = len(self.val_df)
 
-        self.test_df = self.news_df[self.news_df.split=='test']
+        self.test_df = self.review_df[self.review_df.split=='test']
         self.test_size = len(self.test_df)
 
         self._lookup_dict = {'train': (self.train_df, self.train_size),
@@ -52,7 +52,7 @@ class ReviewDataset(Dataset):
         self.set_split('train')
 
         # Class weights
-        class_counts = news_df['reviews.doRecommend'].value_counts().to_dict()
+        class_counts = review_df['reviews.doRecommend'].value_counts().to_dict()
         def sort_key(item):
             return self._vectorizer.category_vocab.lookup_token(item[0])
         sorted_counts = sorted(class_counts.items(), key=sort_key)
@@ -92,17 +92,17 @@ class ReviewDataset(Dataset):
         
         
     @classmethod
-    def load_dataset_and_make_vectorizer(cls, news_csv):
-        """Load dataset and make a new vectorizer from scratch
+    def load_dataset_and_make_vectorizer(cls, review_csv):
+        """Load dataset and make a review vectorizer from scratch
         
         Args:
-            surname_csv (str): location of the dataset
+            review_csv (str): location of the dataset
         Returns:
-            an instance of SurnameDataset
+            an instance of ReviewDataset
         """
-        news_df = pd.read_csv(news_csv)
-        train_news_df = news_df[news_df.split=='train']
-        return cls(news_df, ReviewVectorizer.from_dataframe(train_news_df))
+        review_df = pd.read_csv(review_csv)
+        train_review_df = review_df[review_df.split=='train']
+        return cls(review_df, ReviewVectorizer.from_dataframe(train_review_df))
 
     @classmethod
     def load_dataset_and_load_vectorizer(cls, news_csv, vectorizer_filepath):
