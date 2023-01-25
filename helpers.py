@@ -209,8 +209,8 @@ def predict_category(review, classifier, vectorizer, max_length):
             This ensures to keep it the same size as the training data
     """
     #title = preprocess_texts_to_tokens(title)
-    vectorized_title = torch.tensor(vectorizer.vectorize(title, vector_length=max_length))
-    result = classifier(vectorized_title.unsqueeze(0), apply_softmax=True)
+    vectorized_review = torch.tensor(vectorizer.vectorize(review, vector_length=max_length))
+    result = classifier(vectorized_review.unsqueeze(0), apply_softmax=True)
     probability_values, indices = result.max(dim=1)
     predicted_category = vectorizer.category_vocab.lookup_index(indices.item())
     
