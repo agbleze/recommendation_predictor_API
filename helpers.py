@@ -197,13 +197,13 @@ def generate_batches(dataset, batch_size, shuffle=True,
 
 
 #%%
-def predict_category(title, classifier, vectorizer, max_length):
+def predict_category(review, classifier, vectorizer, max_length):
     """Predicts a news category for a new title
     
     Args:
-        title (str): a raw title string
-        classifier (NewsVectorizer): an instanve of the trained classifier
-        vectorizer (NewsVectorizer): the corresponding vectorizer
+        review (str): a raw title string
+        classifier (ReviewClassifier): an instanve of the trained classifier
+        vectorizer (ReviewVectorizer): the corresponding vectorizer
         max_length (int): the max sequence length
             CNN are sensitive to the input data tensor size, 
             This ensures to keep it the same size as the training data
