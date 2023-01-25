@@ -105,19 +105,19 @@ class ReviewDataset(Dataset):
         return cls(review_df, ReviewVectorizer.from_dataframe(train_review_df))
 
     @classmethod
-    def load_dataset_and_load_vectorizer(cls, news_csv, vectorizer_filepath):
+    def load_dataset_and_load_vectorizer(cls, review_csv, vectorizer_filepath):
         """Load dataset and the corresponding vectorizer. 
-        Used in the case in the vectorizer has been cached for re-use
+             Used in the case in the vectorizer has been cached for re-use
         
         Args:
-            surname_csv (str): location of the dataset
+            review_csv (str): location of the dataset
             vectorizer_filepath (str): location of the saved vectorizer
         Returns:
-            an instance of SurnameDataset
+            an instance of ReviewDataset
         """
-        news_df = pd.read_csv(news_csv)
+        review_df = pd.read_csv(review_csv)
         vectorizer = cls.load_vectorizer_only(vectorizer_filepath)
-        return cls(news_df, vectorizer)
+        return cls(review_df, vectorizer)
 
     @staticmethod
     def load_vectorizer_only(vectorizer_filepath):
@@ -126,7 +126,7 @@ class ReviewDataset(Dataset):
         Args:
             vectorizer_filepath (str): the location of the serialized vectorizer
         Returns:
-            an instance of SurnameVectorizer
+            an instance of NewsVectorizer
         """
         with open(vectorizer_filepath) as fp:
             return ReviewVectorizer.from_serializable(json.load(fp))
@@ -162,13 +162,13 @@ class ReviewDataset(Dataset):
         """
         row = self._target_df.iloc[index]
 
-        title_vector = \
+        review_vector = \
             self._vectorizer.vectorize(row['reviews.text'], self._max_seq_length)
 
         category_index = \
             self._vectorizer.category_vocab.lookup_token(row['reviews.doRecommend'])
 
-        return {'x_data': title_vector,
+        return {'x_data': review_vector,
                 'y_target': category_index}
 
     def get_num_batches(self, batch_size):
