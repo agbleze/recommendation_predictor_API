@@ -22,12 +22,14 @@ import re
 import pandas as pd
 from embedding_matrix import EmbeddingMatrixMaker
 
-
+#%%
 
 file = open(args.vectorizer_file)
 vectorizer_file = json.load(file)
 
-review_vocab = vectorizer_file['review_vocab']['token_to_idx'].keys()
+#%%
+
+review_vocab = vectorizer_file['title_vocab']['token_to_idx'].keys()
 
 
 review_outcome = vectorizer_file['category_vocab']['token_to_idx']  
@@ -84,7 +86,6 @@ class RecommendPredictor(Resource):
 #                             }
 
 app = Flask(__name__)
-#run_with_ngrok(app)
 api = Api(app)
 
 #api.add_resource(Entrypoint, '/')
@@ -104,3 +105,4 @@ if __name__ == '__main__':
     
     
     
+# %%
