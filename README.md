@@ -2,6 +2,9 @@
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/agbleze/recommendation_predictor_API/.github%2Fworkflows%2Fci.yml)
 ![Static Badge](https://img.shields.io/badge/reviewoler-product%20review%20analyzer-yellow)
 ![Static Badge](https://img.shields.io/badge/reviewoler-v0.2.1-red)
+![GitHub Tag](https://img.shields.io/github/v/tag/agbleze/recommendation_predictor_API)
+https://img.shields.io/github/v/tag/agbleze/recommendation_predictor_API
+![Gitea Release](https://img.shields.io/gitea/v/release/agbleze/recommendation_predictor_API)
 
 
 
