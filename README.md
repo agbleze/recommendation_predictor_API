@@ -4,7 +4,8 @@
 ![Static Badge](https://img.shields.io/badge/reviewoler-v0.2.2-red)
 ![GitHub Tag](https://img.shields.io/github/v/tag/agbleze/recommendation_predictor_API)
 https://img.shields.io/github/v/tag/agbleze/recommendation_predictor_API
-![Gitea Release](https://img.shields.io/gitea/v/release/agbleze/recommendation_predictor_API)
+![GitHub Release](https://img.shields.io/github/v/release/agbleze/recommendation_predictor_API)
+
 
 
 
