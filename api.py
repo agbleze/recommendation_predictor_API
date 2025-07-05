@@ -80,18 +80,18 @@ class RecommendPredictor(Resource):
         
         return result
     
-# class Entrypoint(Resource):
-#     @staticmethod
-#     def api_description():
-#         return {'api_desc': 'This is a Deep Learning API for predicting \n'
-#                             'whether a product product will be recommended \n'
-#                             'based on reviews'
-#                             }
+class Entrypoint(Resource):
+    @staticmethod
+    def api_description():
+        return '''This is a Deep Learning API for predicting
+                    whether a product product will be recommended
+                    based on reviews
+                '''            
 
 app = Flask(__name__)
 api = Api(app)
 
-#api.add_resource(Entrypoint, '/')
+api.add_resource(Entrypoint, '/')
 api.add_resource(RecommendPredictor, '/predict')
     
 
