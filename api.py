@@ -54,14 +54,14 @@ classifier.load_state_dict(torch.load(args.model_state_file))
 
 classifier = classifier.to(args.device)
 
-dataset = ReviewDataset.load_dataset_and_make_vectorizer(args.data_csv)
+#dataset = ReviewDataset.load_dataset_and_make_vectorizer(args.data_csv)
 
-vectorizer = dataset.get_vectorizer()
+#vectorizer = dataset.get_vectorizer()
 
 
 #%%
 
-dataset._max_seq_length
+#dataset._max_seq_length
 #%%
 vectorizer = ReviewVectorizer.from_serializable(contents=vectorizer_file)
 
