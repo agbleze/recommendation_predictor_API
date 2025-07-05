@@ -83,10 +83,7 @@ class RecommendPredictor(Resource):
 class Entrypoint(Resource):
     @staticmethod
     def get():
-        return '''This is a Deep Learning API for predicting
-                    whether a product product will be recommended
-                    based on reviews
-                '''            
+        return {'message': '''This is a Deep Learning API for predicting whether a product product will be recommended based on reviews'''}            
 
 app = Flask(__name__)
 api = Api(app)
