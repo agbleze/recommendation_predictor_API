@@ -12,3 +12,4 @@ pytest-cov==5.0.0
 pytest-csv==3.0.0
 pytest-mock==3.14.0
 pytest-timeout==2.3.1
+requests==2.32.3
