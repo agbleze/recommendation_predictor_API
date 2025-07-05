@@ -1,6 +1,3 @@
-
-
-#%%
 import os
 from argparse import Namespace
 from collections import Counter
@@ -22,7 +19,6 @@ from typing import Dict, List, Optional
 
 
 
-#%% NewsClassifier
 class ReviewClassifier(nn.Module):
     def __init__(self, embedding_size, num_embeddings, num_channels,
                  hidden_dim, num_classes, dropout_p, pretrained_embeddings=None,

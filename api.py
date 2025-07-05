@@ -3,7 +3,6 @@
 import joblib
 from flask import Flask, request
 from flask_restful import Resource, Api
-from flask_ngrok import run_with_ngrok
 from helpers import predict_category
 
 from classifier import ReviewClassifier
