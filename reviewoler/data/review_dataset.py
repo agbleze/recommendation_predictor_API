@@ -6,10 +6,10 @@ from torch.utils.data import Dataset, DataLoader
 import numpy as np
 from sklearn.model_selection import train_test_split
 import json
-from vectorizer import ReviewVectorizer
+from ..preprocess.vectorizer import ReviewVectorizer
 from typing import Dict
 
-#%%
+
 class ReviewDataset(Dataset):
     def __init__(self, review_df: pd.DataFrame, vectorizer):
         """
@@ -63,17 +63,17 @@ class ReviewDataset(Dataset):
         train_set, evaluate_set = train_test_split(cls.dataset, train_size=0.7, random_state=123)
         
         validate_set, test_set = train_test_split(evaluate_set, test_size=0.5, random_state=123)
-        
         train_set['split'] = "train"
         validate_set['split'] = 'val'
         test_set['split'] = 'test'
-        
         cls.segmented_data = pd.concat([train_set, validate_set, test_set])
         
         return cls.segmented_data
     
     @classmethod
-    def get_datapath(cls, data_foldername: str = "data", data_filename: str = "product_reviews.csv"):
+    def get_datapath(cls, data_foldername: str = "data", 
+                     data_filename: str = "product_reviews.csv"
+                     ):
         dirpath = os.getcwd()
         filepath = f"{data_foldername}/{data_filename}"
         datapath = dirpath + "/" + filepath
@@ -158,7 +158,8 @@ class ReviewDataset(Dataset):
             self._vectorizer.category_vocab.lookup_token(row['reviews.doRecommend'])
 
         return {'x_data': review_vector,
-                'y_target': category_index}
+                'y_target': category_index
+                }
 
     def get_num_batches(self, batch_size):
         """Given a batch size, return the number of batches in the dataset
@@ -186,8 +187,3 @@ def generate_batches(dataset, batch_size, shuffle=True,
         for name, tensor in data_dict.items():
             out_data_dict[name] = data_dict[name].to(device)
         yield out_data_dict
-        
-        
-        
-        
-        

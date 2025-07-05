@@ -1,14 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
-from tqdm import tqdm_notebook
-import numpy as np
-from sklearn.model_selection import train_test_split
-from typing import Dict, List, Optional
-
-
 
 class ReviewClassifier(nn.Module):
     def __init__(self, embedding_size, num_embeddings, num_channels,

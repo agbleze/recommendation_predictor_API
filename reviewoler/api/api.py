@@ -1,43 +1,25 @@
-#%%
 from flask import Flask, request
 from flask_restful import Resource, Api
-from helpers import predict_category
-from classifier import ReviewClassifier
-from review_dataset import ReviewDataset
+from ..utils.helpers import predict_category
+from ..model.classifier import ReviewClassifier
 import torch
 import json
-from helpers import (args, load_glove_from_file, 
-                     set_seed_everywhere, handle_dirs,
-                     compute_accuracy, make_train_state,
-                     generate_batches, update_train_state, 
-                     predict_category
-                     )
-from vectorizer import ReviewVectorizer
-import re
-import pandas as pd
-from embedding_matrix import EmbeddingMatrixMaker
-
-#%%
+from ..utils.helpers import (args, predict_category)
+from ..preprocess.vectorizer import ReviewVectorizer
+from ..utils.embedding_matrix import EmbeddingMatrixMaker
+from ..model_store.artefacts import embedding_path
 
 file = open(args.vectorizer_file)
 vectorizer_file = json.load(file)
 
-#%%
-
 review_vocab = vectorizer_file['title_vocab']['token_to_idx'].keys()
-
-
 review_outcome = vectorizer_file['category_vocab']['token_to_idx']  
-
-#%%
 
 embedding_matrix = EmbeddingMatrixMaker(glove_filepath=args.glove_filepath,
                                         words=review_vocab
                                     )
 
-embeddings = embedding_matrix.load_embedding()
-
-
+embeddings = embedding_matrix.load_embedding(embedding_path)
 classifier = ReviewClassifier(embedding_size=args.embedding_size,
                             num_embeddings=len(review_vocab),
                             num_channels=args.num_channels,
@@ -48,26 +30,10 @@ classifier = ReviewClassifier(embedding_size=args.embedding_size,
                             padding_idx=0
                             )
 
-
-
 classifier.load_state_dict(torch.load(args.model_state_file))
 
 classifier = classifier.to(args.device)
-
-#dataset = ReviewDataset.load_dataset_and_make_vectorizer(args.data_csv)
-
-#vectorizer = dataset.get_vectorizer()
-
-
-#%%
-
-#dataset._max_seq_length
-#%%
 vectorizer = ReviewVectorizer.from_serializable(contents=vectorizer_file)
-
-    
-#%%
-
 class RecommendPredictor(Resource):
     @staticmethod
     def post():
@@ -76,8 +42,7 @@ class RecommendPredictor(Resource):
         result = predict_category(review=review, classifier=classifier,
                          vectorizer=vectorizer, 
                          max_length=args.max_seq_length + 2 # +2 for the begin and end sequence tokens
-                         )  
-        
+                         )       
         return result
     
 class Entrypoint(Resource):
@@ -90,19 +55,6 @@ api = Api(app)
 
 api.add_resource(Entrypoint, '/')
 api.add_resource(RecommendPredictor, '/predict')
-    
-
-# app = Flask(__name__)
-# api = Api(app)
-
-
-# api.add_resource(RecommendPredictor, '/predict')
-
-
 
 if __name__ == '__main__':
     app.run()
-    
-    
-    
-# %%

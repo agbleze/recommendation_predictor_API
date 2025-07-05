@@ -134,5 +134,5 @@ node_modules/
 
 
 #vercel
-vercel/
+vercel.json
 data_splitted/*

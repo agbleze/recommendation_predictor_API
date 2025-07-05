@@ -1,4 +1,4 @@
-from vocabulary import Vocabulary
+from ..preprocess.vocabulary import Vocabulary
 
 
 class SequenceVocabulary(Vocabulary):
@@ -32,6 +32,3 @@ class SequenceVocabulary(Vocabulary):
             return self._token_to_idx.get(token, self.unk_index)
         else:
             return self._token_to_idx[token]
-        
-
-

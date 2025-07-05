@@ -4,19 +4,14 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 import numpy as np
-from review_dataset import ReviewDataset
-
-model_path = ReviewDataset.get_datapath(data_foldername="model_store", data_filename="model.pth")
-
-vector_path = ReviewDataset.get_datapath(data_foldername='model_store', data_filename='vectorizer.json')
-data_path = ReviewDataset.get_datapath(data_foldername="data_splitted", data_filename="review_df_split2.csv")
-
-#%% setting
+import json
+import requests
+from ..model_store.artefacts import model_path, vector_path
 
 args = Namespace(
     # Data and Path hyper parameters
-    data_csv=data_path,
-    vectorizer_file=vector_path, #"vectorizer.json",
+    data_csv=None,
+    vectorizer_file=vector_path,
     model_state_file=model_path,
     save_dir="model_store",
     # Model hyper parameters
@@ -42,8 +37,6 @@ args = Namespace(
 ) 
 
 
-   
-#%% helper functions
 def make_train_state(args):
     return {'stop_early': False,
             'early_stopping_step': 0,
@@ -103,11 +96,8 @@ def update_train_state(args, model, train_state):
 def compute_accuracy(y_pred, y_target):
     _, y_pred_indices = y_pred.max(dim=1)
     n_correct = torch.eq(y_pred_indices, y_target).sum().item()
-    return n_correct / len(y_pred_indices) * 100
+    return n_correct / len(y_pred_indices) * 100        
         
-        
-        
-#%% general ultilities
 def set_seed_everywhere(seed, cuda):
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -130,8 +120,7 @@ def load_glove_from_file(glove_filepath):
     
     """
     word_to_index = {}
-    embeddings = []
-    
+    embeddings = []    
     with open(glove_filepath) as fp:
         for index, line in enumerate(fp):
             line = line.split(" ") # each line word num1 num2 ...
@@ -164,8 +153,6 @@ def make_embedding_matrix(glove_filepath, words):
             
     return final_embeddings
 
-
-
 def generate_batches(dataset, batch_size, shuffle=True,
                      drop_last=True, device="cpu"): 
     """
@@ -181,9 +168,6 @@ def generate_batches(dataset, batch_size, shuffle=True,
             out_data_dict[name] = data_dict[name].to(device)
         yield out_data_dict
         
-
-
-#%%
 def predict_category(review, classifier, vectorizer, max_length):
     """Predicts a news category for a new title
     
@@ -203,6 +187,11 @@ def predict_category(review, classifier, vectorizer, max_length):
     return {'category': predicted_category,
             'probability': probability_values.item()
             }
-
-
+    
+def request_prediction(URL: str, review_data: str):
+    in_data = {'review': review_data}
+    req = requests.post(url = URL, json=in_data)
+    response = req.content
+    prediction = json.loads(response)
+    return prediction
 

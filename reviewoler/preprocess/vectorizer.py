@@ -1,13 +1,10 @@
 from collections import Counter
 import numpy as np
 import numpy as np
-from vocabulary import Vocabulary
-from sequence_vocabulary import SequenceVocabulary
-from data_preprocess import preprocess_texts_to_tokens
+from ..preprocess.vocabulary import Vocabulary
+from ..preprocess.sequence_vocabulary import SequenceVocabulary
+from ..preprocess.data_preprocess import preprocess_texts_to_tokens
 
-
-
-#%% Vectorizer
 class ReviewVectorizer(object):
     """coordinate the vocabulary and put them to use"""
     def __init__(self, review_vocab, category_vocab) -> None:
@@ -55,11 +52,8 @@ class ReviewVectorizer(object):
         
         return cls(review_vocab=review_vocab, category_vocab=category_vocab)
     
-    #@classmethod
+    @classmethod
     def to_serializable(self):
         return {'review_vocab': self.review_vocab.to_serializable(),
-                'category_vocab': self.category_vocab.to_serializable()}
-    
-
-
-
+                'category_vocab': self.category_vocab.to_serializable()
+                }

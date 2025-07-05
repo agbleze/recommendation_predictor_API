@@ -1,7 +1,5 @@
 import string
 
-
-
 def preprocess_texts_to_tokens(sentence):
     text_tokens = []
     for text in sentence.split(" "):

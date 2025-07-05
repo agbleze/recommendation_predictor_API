@@ -1,40 +1,23 @@
+from reviewoler.api.api import app
+import pytest
 
-#%%
-import requests
+@pytest.fixture(scope="module")
+def client():
+    with app.test_client() as client:
+        yield client
+        
+def test_root_endpoint(client):
+    """Test the root endpoint of the API"""
+    response = client.get('/')
+    assert response.status_code == 200
+    assert isinstance(response.get_json(), dict)
+    assert "message" in response.get_json()
+    
+def test_request_prediction(client):
+    """Test review prediction"""
+    result = client.post('/predict', json={'review': 'its a complete scam'}).get_json()
+    assert isinstance(result, dict)
+    assert "probability" in result
+    assert "category" in result
+    assert isinstance(result["probability"], float)
 
-
-
-#requests.post(url='http://127.0.0.1:8000/predict', json={'review': 'this is a greate product'})
-# %%
-
-#requests.get(url='http://127.0.0.1:8000')
-
-# %%
-# res = requests.post(url='https://fbfb-138-246-3-71.ngrok.io/predict', 
-#                     json={'review': 'recommend product'})
-
-# print(res.content)
-
-
-#https://bewjff2ygzhmhe7luyxlbgk3am.srv.us/
-
-# %%
-import json
-def request_prediction(URL: str, review_data: str):
-    in_data = {'review': review_data}
-    req = requests.post(url = URL, json=in_data)
-    response = req.content
-    prediction = json.loads(response)#['category']
-    return prediction
-  
-# %%
-review_data = ['its a complete scam', 'such an asshole, I will never buy this product again',
-                'Just another bad buy', 'It arrrive on time', 'it is a great',
-                'It arrrive on time and it is a great', ' this is a wonderful product',
-                ' I hate the product', 'I dont like it. I hate the product',
-                'I love the product', 'recommend product', 'love it'
-                ]
-request_prediction(URL='http://127.0.0.1:5000/predict', 
-                   review_data=review_data[-1]
-                   )
-# %%
