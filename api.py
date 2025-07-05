@@ -1,13 +1,9 @@
-
 #%%
-import joblib
 from flask import Flask, request
 from flask_restful import Resource, Api
 from helpers import predict_category
-
 from classifier import ReviewClassifier
 from review_dataset import ReviewDataset
-from torch.nn import Module
 import torch
 import json
 from helpers import (args, load_glove_from_file, 
@@ -62,6 +58,14 @@ dataset = ReviewDataset.load_dataset_and_make_vectorizer(args.data_csv)
 
 vectorizer = dataset.get_vectorizer()
 
+
+#%%
+
+dataset._max_seq_length
+#%%
+vectorizer = ReviewVectorizer.from_serializable(contents=vectorizer_file)
+
+    
 #%%
 
 class RecommendPredictor(Resource):
@@ -71,7 +75,7 @@ class RecommendPredictor(Resource):
         
         result = predict_category(review=review, classifier=classifier,
                          vectorizer=vectorizer, 
-                         max_length=dataset._max_seq_length + 1
+                         max_length=args.max_seq_length + 2 # +2 for the begin and end sequence tokens
                          )  
         
         return result

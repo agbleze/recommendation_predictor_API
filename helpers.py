@@ -37,7 +37,8 @@ args = Namespace(
     catch_keyboard_interrupt=True, 
     reload_from_files=False,
     expand_filepaths_to_save_dir=True,
-    device='cpu'
+    device='cpu',
+    max_seq_length=1646, # This is the max length of the sequence
 ) 
 
 
@@ -194,7 +195,6 @@ def predict_category(review, classifier, vectorizer, max_length):
             CNN are sensitive to the input data tensor size, 
             This ensures to keep it the same size as the training data
     """
-    #title = preprocess_texts_to_tokens(title)
     vectorized_review = torch.tensor(vectorizer.vectorize(review, vector_length=max_length))
     result = classifier(vectorized_review.unsqueeze(0), apply_softmax=True)
     probability_values, indices = result.max(dim=1)

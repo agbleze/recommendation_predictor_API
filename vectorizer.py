@@ -1,23 +1,6 @@
-
-#%%
-import os
-from argparse import Namespace
 from collections import Counter
-import json
-import re
-import string
-
 import numpy as np
-import pandas as pd
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
-from tqdm import tqdm_notebook
 import numpy as np
-from sklearn.model_selection import train_test_split
-from typing import Dict, List, Optional
 from vocabulary import Vocabulary
 from sequence_vocabulary import SequenceVocabulary
 from data_preprocess import preprocess_texts_to_tokens
@@ -53,9 +36,6 @@ class ReviewVectorizer(object):
             
         word_counts = Counter()
         for review in review_df['reviews.text']:
-            # for token in title.split(" "):
-            #     if token not in string.punctuation:
-            #         word_counts[token] += 1
             
             for token in preprocess_texts_to_tokens(review):
                 word_counts[token] += 1
