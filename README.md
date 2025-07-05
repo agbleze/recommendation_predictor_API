@@ -1,6 +1,9 @@
 # API for Natural Language Processing with Deep Learning
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/agbleze/recommendation_predictor_API/.github%2Fworkflows%2Fci.yml)
 
+![Static Badge](https://img.shields.io/badge/reviewoler-product%20review%20analyzer-yellow)
+
+
 
 This repo contains code for an API backed by Deep Learning with Natural Language Processing 
 
