@@ -136,3 +136,5 @@ node_modules/
 #vercel
 vercel.json
 data_splitted/*
+copy.txt
+req.txt
