@@ -1,0 +1,20 @@
+# ignore local data splits
+data_splitted
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+
+# Packaging/build
+build/
+*.egg-info
+
+# Notebooks, temp files
+notebook/
+copy.txt
+req.txt
+
+# Test files (optional)
+test_api.py
+__Dockerfile
