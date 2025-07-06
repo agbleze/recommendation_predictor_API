@@ -40,13 +40,13 @@ If you are proposing a feature:
 
 ## Get Started!
 
-Ready to contribute? Here's how to set up `dcma` for local development.
+Ready to contribute? Here's how to set up `reviewoler` for local development.
 
-1. Download a copy of `dcma` locally.
-2. Install `dcma` using `poetry`:
+1. Download a copy of `recommendation_predictor_API` locally.
+2. Install `reviewoler` using `pip`:
 
     ```console
-    $ poetry install
+    $ pip install .
     ```
 
 3. Use `git` (or similar) to create a branch for local development and make your changes:
@@ -69,5 +69,5 @@ Before you submit a pull request, check that it meets these guidelines:
 
 ## Code of Conduct
 
-Please note that the `dcma` project is released with a
+Please note that the `reviewoler` project is released with a
 Code of Conduct. By contributing to this project you agree to abide by its terms.
