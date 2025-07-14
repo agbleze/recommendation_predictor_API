@@ -13,7 +13,9 @@ class ReviewVectorizer(object):
         
     def vectorize(self, review, vector_length=-1):
         indices = [self.review_vocab.begin_seq_index]
-        indices.extend(self.review_vocab.lookup_token(token) for token in preprocess_texts_to_tokens(review))
+        indices.extend(self.review_vocab.lookup_token(token) 
+                       for token in preprocess_texts_to_tokens(review)
+                       )
         indices.append(self.review_vocab.end_seq_index)
         
         if vector_length < 0:

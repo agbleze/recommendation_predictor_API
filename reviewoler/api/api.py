@@ -17,7 +17,7 @@ review_outcome = vectorizer_file['category_vocab']['token_to_idx']
 
 embedding_matrix = EmbeddingMatrixMaker(glove_filepath=args.glove_filepath,
                                         words=review_vocab
-                                    )
+                                        )
 
 embeddings = embedding_matrix.load_embedding(embedding_path)
 classifier = ReviewClassifier(embedding_size=args.embedding_size,
@@ -40,9 +40,9 @@ class RecommendPredictor(Resource):
         review = request.get_json()['review']
         
         result = predict_category(review=review, classifier=classifier,
-                         vectorizer=vectorizer, 
-                         max_length=args.max_seq_length + 2 # +2 for the begin and end sequence tokens
-                         )       
+                                vectorizer=vectorizer, 
+                                max_length=args.max_seq_length + 2 # +2 for the begin and end sequence tokens
+                                )       
         return result
     
 class Entrypoint(Resource):

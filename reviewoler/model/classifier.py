@@ -64,7 +64,7 @@ class ReviewClassifier(nn.Module):
         # avg and remove extra dimension
         remaining_size = features.size(dim=2)
         features = F.avg_pool1d(input=features, kernel_size=remaining_size).squeeze(dim=2)
-        #features = F.dropout(input=features, p=self._dropout_p)
+        features = F.dropout(input=features, p=self._dropout_p)
         
         # mlp_classifier
         intermediate_vector = F.relu(self.fc1(features))
