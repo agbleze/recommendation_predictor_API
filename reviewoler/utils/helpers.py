@@ -12,7 +12,7 @@ args = Namespace(
     # Data and Path hyper parameters
     data_csv=None,
     vectorizer_file=vector_path,
-    model_state_file=model_path,
+    model_file=model_path,
     save_dir="model_store",
     # Model hyper parameters
     glove_filepath='glove/glove.6B.100d.txt', 
@@ -36,62 +36,6 @@ args = Namespace(
     max_seq_length=1646, # This is the max length of the sequence
 ) 
 
-
-def make_train_state(args):
-    return {'stop_early': False,
-            'early_stopping_step': 0,
-            'early_stopping_best_val': 1e8,
-            'learning_rate': args.learning_rate,
-            'epoch_index': 0,
-            'train_loss': [],
-            'train_acc': [],
-            'val_loss': [],
-            'val_acc': [],
-            'test_loss': -1,
-            'test_acc': -1,
-            'model_filename': args.model_state_file}
-
-def update_train_state(args, model, train_state):
-    """Handle the training state updates.
-
-    Components:
-     - Early Stopping: Prevent overfitting.
-     - Model Checkpoint: Model is saved if the model is better
-
-    :param args: main arguments
-    :param model: model to train
-    :param train_state: a dictionary representing the training state values
-    :returns:
-        a new train_state
-    """
-
-    # Save one model at least
-    if train_state['epoch_index'] == 0:
-        torch.save(model.state_dict(), train_state['model_filename'])
-        train_state['stop_early'] = False
-
-    # Save model if performance improved
-    elif train_state['epoch_index'] >= 1:
-        loss_tm1, loss_t = train_state['val_loss'][-2:]
-
-        # If loss worsened
-        if loss_t >= train_state['early_stopping_best_val']:
-            # Update step
-            train_state['early_stopping_step'] += 1
-        # Loss decreased
-        else:
-            # Save the best model
-            if loss_t < train_state['early_stopping_best_val']:
-                torch.save(model.state_dict(), train_state['model_filename'])
-
-            # Reset early stopping step
-            train_state['early_stopping_step'] = 0
-
-        # Stop early ?
-        train_state['stop_early'] = \
-            train_state['early_stopping_step'] >= args.early_stopping_criteria
-
-    return train_state
 
 def compute_accuracy(y_pred, y_target):
     _, y_pred_indices = y_pred.max(dim=1)
@@ -163,26 +107,64 @@ def generate_batches(dataset, batch_size, shuffle=True,
             out_data_dict[name] = data_dict[name].to(device)
         yield out_data_dict
         
-def predict_category(review, classifier, vectorizer, max_length):
-    """Predicts a news category for a new title
+# def predict_category(review, classifier, vectorizer, max_length):
+#     """Predicts a news category for a new title
+    
+#     Args:
+#         review (str): a raw title string
+#         classifier (ReviewClassifier): an instanve of the trained classifier
+#         vectorizer (ReviewVectorizer): the corresponding vectorizer
+#         max_length (int): the max sequence length
+#             CNN are sensitive to the input data tensor size, 
+#             This ensures to keep it the same size as the training data
+#     """
+#     vectorized_review = torch.tensor(vectorizer.vectorize(review, vector_length=max_length))
+#     result = classifier(vectorized_review.unsqueeze(0), apply_softmax=True)
+#     probability_values, indices = result.max(dim=1)
+#     predicted_category = vectorizer.category_vocab.lookup_index(indices.item())
+    
+#     return {'category': predicted_category,
+#             'probability': probability_values.item()
+#             }
+
+
+import numpy as np
+from scipy.special import softmax
+
+def predict_category(review, session, vectorizer, max_length):
+    """
+    Predicts a news category for a new title using ONNX Runtime
     
     Args:
-        review (str): a raw title string
-        classifier (ReviewClassifier): an instanve of the trained classifier
-        vectorizer (ReviewVectorizer): the corresponding vectorizer
-        max_length (int): the max sequence length
-            CNN are sensitive to the input data tensor size, 
-            This ensures to keep it the same size as the training data
+        review (str): A raw title string
+        session (onnxruntime.InferenceSession): Loaded ONNX session
+        vectorizer (ReviewVectorizer): Corresponding vectorizer instance
+        max_length (int): Required input length for CNN
+        
+    Returns:
+        dict: {'category': str, 'probability': float}
     """
-    vectorized_review = torch.tensor(vectorizer.vectorize(review, vector_length=max_length))
-    result = classifier(vectorized_review.unsqueeze(0), apply_softmax=True)
-    probability_values, indices = result.max(dim=1)
-    predicted_category = vectorizer.category_vocab.lookup_index(indices.item())
+    # Step 1: Tokenize + pad/truncate input
+    token_ids = vectorizer.vectorize(review, vector_length=max_length)
+    input_array = np.array([token_ids], dtype=np.int64)  # shape: [1, max_length]
     
-    return {'category': predicted_category,
-            'probability': probability_values.item()
-            }
+    # Step 2: Run ONNX inference
+    input_name = session.get_inputs()[0].name
+    logits = session.run(None, {input_name: input_array})[0]  # shape: [1, num_classes]
     
+    # Step 3: Apply softmax to get probabilities
+    probs = softmax(logits, axis=1)  # shape: [1, num_classes]
+    
+    # Step 4: Get highest probability class
+    predicted_idx = np.argmax(probs[0])
+    predicted_category = vectorizer.category_vocab.lookup_index(predicted_idx)
+    confidence = probs[0][predicted_idx]
+    
+    return {
+        'category': predicted_category,
+        'probability': float(confidence)
+    }
+ 
 def request_prediction(URL: str, review_data: str):
     in_data = {'review': review_data}
     req = requests.post(url = URL, json=in_data)

@@ -46,7 +46,7 @@ class ReviewVectorizer(object):
     
     @classmethod
     def from_serializable(cls, contents):
-        review_vocab = SequenceVocabulary.from_serializable(contents['title_vocab'])
+        review_vocab = SequenceVocabulary.from_serializable(contents['review_vocab'])
         
         category_vocab = Vocabulary.from_serializable(contents['category_vocab'])
         
