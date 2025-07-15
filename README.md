@@ -11,7 +11,7 @@
 
 Reviewoler ia an api powered by Deep Learning for predicting whether client will recommend a product and the likelihood of that based on product reviews. This service is containerized with Docker and ready for deployment
 
-The actual development of the model is in a ![different repo](https://github.com/agbleze/reviews_recommender.git)
+The model was developed using a simple Convolutional Neural Network ![review classifier](https://github.com/agbleze/reviews_recommender.git)
 Thus this repo is meant to serve the model developed from that repo as a self contained api that can be deloyed and used independently.
 
 
