@@ -1,6 +1,4 @@
 import os
-from ..data.review_dataset import ReviewDataset
-
 
 __all__ = ['model_path',
             'vector_path',
