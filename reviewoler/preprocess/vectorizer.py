@@ -1,6 +1,5 @@
 from collections import Counter
 import numpy as np
-import numpy as np
 from ..preprocess.vocabulary import Vocabulary
 from ..preprocess.sequence_vocabulary import SequenceVocabulary
 from ..preprocess.data_preprocess import preprocess_texts_to_tokens
@@ -46,7 +45,7 @@ class ReviewVectorizer(object):
     
     @classmethod
     def from_serializable(cls, contents):
-        review_vocab = SequenceVocabulary.from_serializable(contents['title_vocab'])
+        review_vocab = SequenceVocabulary.from_serializable(contents['review_vocab'])
         
         category_vocab = Vocabulary.from_serializable(contents['category_vocab'])
         
