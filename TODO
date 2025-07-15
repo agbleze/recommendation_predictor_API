@@ -1,9 +1,0 @@
-# save current code in diff branch first
-remove all files that contain torch
-keep only the preprocess module from exiting code
-remove embedding matrix from utils --> because we are no more using glove to train due to added size
-remove all func helpers except predict_category and request_prediction
-change torch.tensor in predict_category to numpy
-
-Introduce the onnx model and remove torch 
-replace all dependent work on torch
