@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='reviewoler',
-      version="1.0.0",
+      version="1.1.0",
       description='''This is a machnine learning package that 
                         runs as an API for predicting whether or 
                         not a product will be recommended and the probability of that
